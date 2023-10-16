@@ -6,7 +6,7 @@ import { LogSeveretyLevel, LogEntity } from "../../domain/entities/log.entity";
 export class FileSystemDatasource implements LogDatasource {
 
   private readonly logPath     = 'logs/';
-  private readonly lowLogsPath = 'logs/logs-low.log';
+  private readonly allLogsPath = 'logs/logs-all.log';
   private readonly mediumLogsPath = 'logs/logs-medium.log';
   private readonly highLogsPath   = 'logs/logs-high.log';
 
@@ -21,21 +21,58 @@ export class FileSystemDatasource implements LogDatasource {
 
     [
 
-      this.lowLogsPath,
+      this.allLogsPath,
       this.mediumLogsPath,
       this.highLogsPath
     
     ].forEach( path => {
       if ( fs.existsSync( path )) return;
       fs.writeFileSync( path, '');
-    })
+    });
   }
 
-  saveLog(log: LogSeveretyLevel): Promise<void> {
-    throw new Error("Method not implemented.");
+  async saveLog(newLog: LogEntity): Promise<void> {
+
+    const logAsJson = `${JSON.stringify(newLog)}\n`;
+
+    fs.appendFileSync( this.allLogsPath, logAsJson );
+
+    if ( newLog.level === LogSeveretyLevel.low ) return;
+    
+    if ( newLog.level === LogSeveretyLevel.medium ) {
+      fs.appendFileSync( this.mediumLogsPath, logAsJson);
+    }
+    else {
+      fs.appendFileSync( this.highLogsPath, logAsJson);
+    }  
   }
-  getLogs(severetyLevel: LogSeveretyLevel): Promise<LogEntity[]> {
-    throw new Error("Method not implemented.");
+
+  private getLogsFromFile = ( path: string ): LogEntity[] => {
+
+    const content = fs.readFileSync( path, 'utf-8' );
+
+    const logs = content.split('\n').map(LogEntity.fromJson);
+
+    return logs;
+  }
+  
+  async getLogs(severetyLevel: LogSeveretyLevel): Promise<LogEntity[]> {
+
+    switch( severetyLevel ) {
+
+      case LogSeveretyLevel.low:
+        return this.getLogsFromFile(this.allLogsPath);
+      
+      case LogSeveretyLevel.medium:
+        return this.getLogsFromFile(this.mediumLogsPath);
+
+      case LogSeveretyLevel.high:
+        return this.getLogsFromFile(this.highLogsPath);
+      
+      default:
+        throw new Error(`${ severetyLevel } not implemented`);
+    }
+
   }
 
 }
