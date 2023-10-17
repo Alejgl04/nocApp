@@ -6,7 +6,7 @@ import { LogEntity, LogSeveretyLevel } from '../entities/log.entity';
  */
 export abstract class LogRepository {
   
-  abstract saveLog( log: LogSeveretyLevel ): Promise<void>;
+  abstract saveLog( log: LogEntity ): Promise<void>;
   abstract getLogs( severetyLevel: LogSeveretyLevel ): Promise<LogEntity[]>;
   
 }
