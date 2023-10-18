@@ -13,4 +13,5 @@
 
 ```
 
-3. Execute npm run dev
+3. Run ```npm install```
+3. Execute ```npm run dev```

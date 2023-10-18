@@ -21,7 +21,7 @@ export class Server {
           fileSystemLogRepository,
 
           () => console.log(`${url} is ok`),
-          (error) => console.log( error )
+          (error: any) => console.log( error )
         
           ).execute( url );
         // new CheckService().execute('http://localhost:3000');
