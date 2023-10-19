@@ -18,14 +18,14 @@ export class Server {
     console.log('Server started...');
 
 
-    new SendEmailLogs(
-      emailService,
-      fileSystemLogRepository
-    ).execute(
-      [
-        'alejo.jesus.magne@gmail.com'
-      ]
-    )
+    // new SendEmailLogs(
+    //   emailService,
+    //   fileSystemLogRepository
+    // ).execute(
+    //   [
+    //     'alejo.jesus.magne@gmail.com'
+    //   ]
+    // )
 
     // const emailService = new EmailService();
     // emailService.sendEmail({
