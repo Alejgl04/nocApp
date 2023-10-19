@@ -14,4 +14,5 @@
 ```
 
 3. Run ```npm install```
-3. Execute ```npm run dev```
+4. Run docker-compose up -d
+5. Execute ```npm run dev```
